@@ -1,20 +1,124 @@
 package com.globletech.plugins.systemui;
 
+import android.graphics.Color;
+import android.view.View;
+import android.view.Window;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.globletech.plugins.systemui.utils.ScreenUtil;
+import com.globletech.plugins.systemui.utils.SystemUiHelper;
 
+/**
+ * 系统UI插件
+ */
 @NativePlugin
 public class SystemUI extends Plugin {
+    enum UiCategory {STATUS_BAR, NAVIGATION_BAR, ALL;}
 
-    @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
+    @PluginMethod()
+    public void setIconMode(final PluginCall call) {
+        setSystemUiIconMode(call, UiCategory.ALL);
+    }
 
-        JSObject ret = new JSObject();
-        ret.put("value", value);
-        call.success(ret);
+    @PluginMethod()
+    public void setStatusBarIconMode(final PluginCall call) {
+        setSystemUiIconMode(call, UiCategory.STATUS_BAR);
+    }
+
+    @PluginMethod()
+    public void setNavigationBarIconMode(final PluginCall call) {
+        setSystemUiIconMode(call, UiCategory.NAVIGATION_BAR);
+    }
+
+    @PluginMethod()
+    public void setNavigationBarVisibility(final PluginCall call) {
+        final String visibility = call.getString("visibility");
+        if (visibility == null) {
+            call.error("Mode must be provided");
+            return;
+        }
+        boolean isHidden = visibility.equals("HIDDEN");
+        getBridge().executeOnMainThread(() -> {
+            Window window = getBridge().getActivity().getWindow();
+            View decorView = window.getDecorView();
+            int uiOptions = decorView.getSystemUiVisibility();
+            if (isHidden) { // 默认沉浸模式
+                uiOptions = uiOptions | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            } else {
+                uiOptions = uiOptions & ~View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        & ~View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            }
+            decorView.setSystemUiVisibility(uiOptions);
+            call.success();
+        });
+    }
+
+    @PluginMethod()
+    public void setNavigationBarBackgroundColor(final PluginCall call) {
+        final String color = call.getString("color");
+        if (color == null) {
+            call.error("Color must be provided");
+            return;
+        }
+        getBridge().executeOnMainThread(() -> {
+            Window window = getBridge().getActivity().getWindow();
+            try {
+                window.setNavigationBarColor(
+                        Color.parseColor(color.toUpperCase())
+                );
+                call.success();
+            } catch (IllegalArgumentException ex) {
+                call.error("Invalid color provided. Must be a hex string (ex: #ff0000");
+            }
+        });
+    }
+
+    @PluginMethod()
+    public void getInfo(final PluginCall call) {
+        JSObject obj = new JSObject();
+        obj.put(
+                "statusBarHeight",
+                ScreenUtil.px2dp(
+                        getBridge().getActivity(),
+                        SystemUiHelper.getStatusBarHeight(getBridge().getActivity())
+                )
+        );
+        obj.put(
+                "navigationBarHeight",
+                ScreenUtil.px2dp(
+                        getBridge().getActivity(),
+                        SystemUiHelper.getNavigationBarHeight(getBridge().getActivity())
+                )
+        );
+        call.success(obj);
+    }
+
+    private void setSystemUiIconMode(final PluginCall call, UiCategory category) {
+        final String mode = call.getString("mode");
+        if (mode == null) {
+            call.error("Mode must be provided");
+            return;
+        }
+        boolean isLight = mode.equals("LIGHT");
+        getBridge().executeOnMainThread(() -> {
+            switch (category) {
+                case STATUS_BAR:
+                    SystemUiHelper.setStatusBarMode(getBridge().getActivity(), isLight);
+                    break;
+                case NAVIGATION_BAR:
+                    SystemUiHelper.setNavigationBarMode(getBridge().getActivity(), isLight);
+                    break;
+                case ALL:
+                    SystemUiHelper.setStatusBarMode(getBridge().getActivity(), isLight);
+                    SystemUiHelper.setNavigationBarMode(getBridge().getActivity(), isLight);
+                    break;
+            }
+            call.success();
+        });
     }
 }

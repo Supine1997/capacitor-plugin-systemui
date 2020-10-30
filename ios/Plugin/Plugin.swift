@@ -8,10 +8,27 @@ import Capacitor
 @objc(SystemUI)
 public class SystemUI: CAPPlugin {
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.success([
-            "value": value
-        ])
+    @objc func setIconMode(_ call: CAPPluginCall) {
+        call.error("platform not support!")
+    }
+
+    @objc func setStatusBarIconMode(_ call: CAPPluginCall) {
+        call.error("platform not support!")
+    }
+
+    @objc func setNavigationBarIconMode(_ call: CAPPluginCall) {
+        call.error("platform not support!")
+    }
+
+    @objc func getInfo(_ call: CAPPluginCall) {
+        call.error("platform not support!")
+    }
+
+    @objc func setNavigationBarVisibility(_ call: CAPPluginCall) {
+        call.error("platform not support!")
+    }
+
+    @objc func setNavigationBarBackgroundColor(_ call: CAPPluginCall) {
+        call.error("platform not support!")
     }
 }
