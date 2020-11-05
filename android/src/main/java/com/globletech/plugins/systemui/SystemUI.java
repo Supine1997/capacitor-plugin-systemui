@@ -10,7 +10,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.globletech.plugins.systemui.utils.ScreenUtil;
-import com.globletech.plugins.systemui.utils.SystemUiHelper;
+import com.globletech.plugins.systemui.utils.SystemUIHelper;
 
 /**
  * 系统UI插件
@@ -21,17 +21,17 @@ public class SystemUI extends Plugin {
 
     @PluginMethod()
     public void setIconMode(final PluginCall call) {
-        setSystemUiIconMode(call, UiCategory.ALL);
+        setSystemUIIconMode(call, UiCategory.ALL);
     }
 
     @PluginMethod()
     public void setStatusBarIconMode(final PluginCall call) {
-        setSystemUiIconMode(call, UiCategory.STATUS_BAR);
+        setSystemUIIconMode(call, UiCategory.STATUS_BAR);
     }
 
     @PluginMethod()
     public void setNavigationBarIconMode(final PluginCall call) {
-        setSystemUiIconMode(call, UiCategory.NAVIGATION_BAR);
+        setSystemUIIconMode(call, UiCategory.NAVIGATION_BAR);
     }
 
     @PluginMethod()
@@ -85,20 +85,20 @@ public class SystemUI extends Plugin {
                 "statusBarHeight",
                 ScreenUtil.px2dp(
                         getBridge().getActivity(),
-                        SystemUiHelper.getStatusBarHeight(getBridge().getActivity())
+                        SystemUIHelper.getStatusBarHeight(getBridge().getActivity())
                 )
         );
         obj.put(
                 "navigationBarHeight",
                 ScreenUtil.px2dp(
                         getBridge().getActivity(),
-                        SystemUiHelper.getNavigationBarHeight(getBridge().getActivity())
+                        SystemUIHelper.getNavigationBarHeight(getBridge().getActivity())
                 )
         );
         call.success(obj);
     }
 
-    private void setSystemUiIconMode(final PluginCall call, UiCategory category) {
+    private void setSystemUIIconMode(final PluginCall call, UiCategory category) {
         final String mode = call.getString("mode");
         if (mode == null) {
             call.error("Mode must be provided");
@@ -108,14 +108,14 @@ public class SystemUI extends Plugin {
         getBridge().executeOnMainThread(() -> {
             switch (category) {
                 case STATUS_BAR:
-                    SystemUiHelper.setStatusBarMode(getBridge().getActivity(), isLight);
+                    SystemUIHelper.setStatusBarMode(getBridge().getActivity(), isLight);
                     break;
                 case NAVIGATION_BAR:
-                    SystemUiHelper.setNavigationBarMode(getBridge().getActivity(), isLight);
+                    SystemUIHelper.setNavigationBarMode(getBridge().getActivity(), isLight);
                     break;
                 case ALL:
-                    SystemUiHelper.setStatusBarMode(getBridge().getActivity(), isLight);
-                    SystemUiHelper.setNavigationBarMode(getBridge().getActivity(), isLight);
+                    SystemUIHelper.setStatusBarMode(getBridge().getActivity(), isLight);
+                    SystemUIHelper.setNavigationBarMode(getBridge().getActivity(), isLight);
                     break;
             }
             call.success();
