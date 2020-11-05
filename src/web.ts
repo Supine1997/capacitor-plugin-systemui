@@ -1,9 +1,9 @@
 import {WebPlugin} from '@capacitor/core';
 import {
-    SystemUiBarVisibilityOption, SystemUiColorOption,
-    SystemUiIconModeOption,
+    SystemUIBarVisibilityOption, SystemUIColorOption,
+    SystemUIIconModeOption,
     SystemUIPlugin,
-    SystemUiPluginInfoResult
+    SystemUIPluginInfoResult
 } from './definitions';
 
 export class SystemUIWeb extends WebPlugin implements SystemUIPlugin {
@@ -15,18 +15,18 @@ export class SystemUIWeb extends WebPlugin implements SystemUIPlugin {
     }
 
     // @ts-ignore
-    async setIconMode(option: SystemUiIconModeOption): Promise<void> {
+    async setIconMode(option: SystemUIIconModeOption): Promise<void> {
     }
 
     // @ts-ignore
-    async setStatusBarIconMode(option: SystemUiIconModeOption): Promise<void> {
+    async setStatusBarIconMode(option: SystemUIIconModeOption): Promise<void> {
     }
 
     // @ts-ignore
-    async setNavigationBarIconMode(option: SystemUiIconModeOption): Promise<void> {
+    async setNavigationBarIconMode(option: SystemUIIconModeOption): Promise<void> {
     }
 
-    async getInfo(): Promise<SystemUiPluginInfoResult> {
+    async getInfo(): Promise<SystemUIPluginInfoResult> {
         return {
             statusBarHeight: 0,
             navigationBarHeight: 0,
@@ -34,11 +34,11 @@ export class SystemUIWeb extends WebPlugin implements SystemUIPlugin {
     }
 
     // @ts-ignore
-    async setNavigationBarVisibility(option: SystemUiBarVisibilityOption): Promise<void> {
+    async setNavigationBarVisibility(option: SystemUIBarVisibilityOption): Promise<void> {
     }
 
     // @ts-ignore
-    async setNavigationBarBackgroundColor(option: SystemUiColorOption): Promise<void> {
+    async setNavigationBarBackgroundColor(option: SystemUIColorOption): Promise<void> {
     }
 }
 

@@ -13,7 +13,7 @@ import com.gyf.immersionbar.OSUtils;
 /**
  * 系统UI工具类
  */
-public class SystemUiHelper {
+public class SystemUIHelper {
 
     /**
      * 设置内容全屏模式
